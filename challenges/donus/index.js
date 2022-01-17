@@ -29,11 +29,45 @@ function normalizePayload() {
 }
 
 const checkBestCreditOption = (user) => {
-  const { name, age, reward } = user;
+  const { age, reward } = user;
 
-  if (reward) {
-    console.log(name);
+  let bestOption = null;
+
+  if (age > 64) {
+    if (reward) {
+      bestOption = companies.sort((firstCompany, secondCompany) => {
+        return (
+          firstCompany.priceRewardElderly - secondCompany.priceRewardElderly ||
+          secondCompany.rating - firstCompany.rating
+        );
+      });
+    } else {
+      bestOption = companies.sort((firstCompany, secondCompany) => {
+        return (
+          firstCompany.priceElderly - secondCompany.priceElderly ||
+          secondCompany.rating - firstCompany.rating
+        );
+      });
+    }
+  } else {
+    if (reward) {
+      bestOption = companies.sort((firstCompany, secondCompany) => {
+        return (
+          firstCompany.priceReward - secondCompany.priceReward ||
+          secondCompany.rating - firstCompany.rating
+        );
+      });
+    } else {
+      bestOption = companies.sort((firstCompany, secondCompany) => {
+        return (
+          firstCompany.price - secondCompany.price ||
+          secondCompany.rating - firstCompany.rating
+        );
+      });
+    }
   }
+
+  return bestOption;
 };
 
 export const getBestCreditCompany = (customerName) => {
@@ -45,7 +79,7 @@ export const getBestCreditCompany = (customerName) => {
     }
   });
 
-  return checkBestCreditOption(user);
+  return checkBestCreditOption(user)[0].name;
 };
 
-getBestCreditCompany("José Carlos");
+console.log(getBestCreditCompany("José Carlos"));
