@@ -3,10 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: path.resolve(__dirname, 'src', 'index.js'),
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle[hash].js', // gera um nobo bundle com um novo hash caso os arquivos tenham sido modificados
+    filename: 'bundle[contenthash].js', // gera um nobo bundle com um novo hash caso os arquivos tenham sido modificados
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -22,5 +23,8 @@ module.exports = {
         use: 'babel-loader', // realiza o transpile de todos arquivos com extensão .js antes de gerar o bundle
       }
     ]
+  },
+  devServer: {
+    port: 3000,
   }
 };
