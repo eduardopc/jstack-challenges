@@ -5,10 +5,30 @@ import Posts from "./Posts";
 
 function App() {
   const [posts, setPosts] = useState([
-    { title: "Post1", description: "Description Post1", likes: 20 },
-    { title: "Post2", description: "Description Post2", likes: 30 },
-    { title: "Post3", description: "Description Post3", likes: 5 },
-    { title: "Post4", description: "Description Post4", likes: 40 },
+    {
+      id: Math.random(),
+      title: "Post1",
+      description: "Description Post1",
+      likes: 20,
+    },
+    {
+      id: Math.random(),
+      title: "Post2",
+      description: "Description Post2",
+      likes: 30,
+    },
+    {
+      id: Math.random(),
+      title: "Post3",
+      description: "Description Post3",
+      likes: 5,
+    },
+    {
+      id: Math.random(),
+      title: "Post4",
+      description: "Description Post4",
+      likes: 40,
+    },
   ]);
 
   function handleAddPost() {
@@ -24,6 +44,10 @@ function App() {
     }, 2000);
   }
 
+  function handleRemovePost(postId) {
+    setPosts((prevState) => prevState.filter((post) => post.id !== postId));
+  }
+
   return (
     <>
       <Header title="Header da Aplicação">
@@ -34,9 +58,13 @@ function App() {
       {posts.map((post, index) => (
         <Posts
           key={index}
-          title={post.title}
-          description={post.description}
-          likes={post.likes}
+          onRemove={handleRemovePost}
+          post={{
+            id: post.id,
+            title: post.title,
+            description: post.description,
+            likes: post.likes,
+          }}
         />
       ))}
     </>

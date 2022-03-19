@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "proptypes";
 
-function Posts({ title, description, likes }) {
+function Posts({ post, onRemove }) {
   return (
     <div>
       <article style={{ backgroundColor: "#25D1BF" }}>
-        <strong>{title}</strong>
+        <strong>{post.title}</strong>
+        <button onClick={() => onRemove(post.id)}>Remover</button>
         <br />
-        <p>{description}</p>
-        Likes: {likes}
+        <p>{post.description}</p>
+        Likes: {post.likes}
       </article>
       <br />
     </div>
@@ -16,9 +17,12 @@ function Posts({ title, description, likes }) {
 }
 
 Posts.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  likes: PropTypes.number.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  post: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+  }),
 };
 
 export default Posts;
