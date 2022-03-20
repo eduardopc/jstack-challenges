@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Posts from "./Posts";
 
+import { ThemeProvider } from "./ThemeContext";
+
 function App() {
   const [posts, setPosts] = useState([
     {
@@ -49,25 +51,16 @@ function App() {
   }
 
   return (
-    <>
+    <ThemeProvider>
       <Header title="Header da Aplicação">
         <h2>Header h2</h2>
         <button onClick={handleAddPost}>Adicionar Post</button>
       </Header>
 
       {posts.map((post, index) => (
-        <Posts
-          key={index}
-          onRemove={handleRemovePost}
-          post={{
-            id: post.id,
-            title: post.title,
-            description: post.description,
-            likes: post.likes,
-          }}
-        />
+        <Posts key={index} onRemove={handleRemovePost} post={post} />
       ))}
-    </>
+    </ThemeProvider>
   );
 }
 

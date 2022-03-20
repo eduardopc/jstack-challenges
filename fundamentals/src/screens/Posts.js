@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "proptypes";
 
+import Button from "./Button";
+
 function Posts({ post, onRemove }) {
   return (
     <div>
       <article style={{ backgroundColor: "#25D1BF" }}>
         <strong>{post.title}</strong>
-        <button onClick={() => onRemove(post.id)}>Remover</button>
+        <Button onClick={() => onRemove(post.id)}>Remover</Button>
         <br />
         <p>{post.description}</p>
         Likes: {post.likes}
