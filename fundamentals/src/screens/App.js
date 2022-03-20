@@ -52,7 +52,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Header title="Header da Aplicação">
+      <Header title="Header da Aplicação com CSS Modules">
         <h2>Header h2</h2>
         <button onClick={handleAddPost}>Adicionar Post</button>
       </Header>
