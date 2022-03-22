@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Header from "./Header";
 import Posts from "./Posts";
@@ -32,6 +32,14 @@ function App() {
       likes: 40,
     },
   ]);
+
+  useEffect(() => {
+    console.debug("Mount component");
+
+    return () => {
+      console.debug("Ummount component");
+    };
+  });
 
   function handleAddPost() {
     setTimeout(() => {
