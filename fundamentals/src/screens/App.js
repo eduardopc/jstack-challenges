@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Header from "./Header";
 import Posts from "./Posts";
+import CountryCapitalGame from "../challenges/codility/CountryGames";
 
 import { ThemeProvider } from "./ThemeContext";
 
@@ -60,14 +61,15 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Header title="Header da Aplicação com CSS Modules">
+      <CountryCapitalGame />
+      {/* <Header title="Header da Aplicação com CSS Modules">
         <h2>Header h2</h2>
         <button onClick={handleAddPost}>Adicionar Post</button>
       </Header>
 
       {posts.map((post, index) => (
         <Posts key={index} onRemove={handleRemovePost} post={post} />
-      ))}
+      ))} */}
     </ThemeProvider>
   );
 }
