@@ -5,9 +5,10 @@ const values = { Germany: "Berlin", Azerbaijan: "Baku", Brazil: "Brasilia" };
 function sortValues(data) {
   const allValues = [];
 
-  for (const [country, capital] of Object.entries(data)) {
-    allValues.push(country);
-    allValues.push(capital);
+  for (let index = 0; index < Object.entries(data).length; index++) {
+    const [country, capital] = Object.entries(data)[index];
+    allValues.push({ key: index, value: country });
+    allValues.push({ key: index, value: capital });
   }
 
   return allValues.sort(() => Math.random() - 0.5);
@@ -18,7 +19,7 @@ export default function CountryCapitalGame({ data = values }) {
   const [checkRightAnswer, setCheckRightAnswer] = useState([]);
 
   function handleButtonClicked(e) {
-    const element = document.getElementsByClassName(e.target.value)[0];
+    const element = document.getElementsByClassName(e.target.className)[0];
 
     element.classList.length < 2
       ? element.classList.add("blue")
@@ -37,6 +38,8 @@ export default function CountryCapitalGame({ data = values }) {
       });
       return;
     }
+
+    setCheckRightAnswer([]);
   }
 
   useEffect(() => {
@@ -51,13 +54,15 @@ export default function CountryCapitalGame({ data = values }) {
   return (
     <div>
       <style>{`
-        .blue {background-color: blue; color: black}
+        .blue {background-color: blue; color: black},
+        .red {background-color: red; color: black}
       `}</style>
-      {values.map((value, index) => {
+      {values.map(({ value, key }, index) => {
         return (
           <button
             key={index}
-            value={value}
+            value={key}
+            name={key}
             className={value}
             onClick={(value) => handleButtonClicked(value)}
           >
