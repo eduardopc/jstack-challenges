@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 const values = { Germany: "Berlin", Azerbaijan: "Baku", Brazil: "Brasilia" };
 
@@ -16,53 +16,63 @@ function sortValues(data) {
 
 export default function CountryCapitalGame({ data = values }) {
   const [values, setValues] = useState([]);
+  const [options, setOptions] = useState([]);
   const [checkRightAnswer, setCheckRightAnswer] = useState([]);
 
   function handleButtonClicked(e) {
     const element = document.getElementsByClassName(e.target.className)[0];
 
-    element.classList.length < 2
-      ? element.classList.add("blue")
-      : element.classList.remove("blue");
+    const isDuplicated = options.some((option) => option === element.className);
 
-    checkCountryCapital();
-  }
-
-  function checkCountryCapital() {
-    const elements = document.getElementsByClassName("blue");
-
-    if (elements.length === 2) {
-      Object.entries(elements).map((element) => {
-        const { innerHTML } = element[1];
-        setCheckRightAnswer((prevState) => [...prevState, innerHTML]);
-      });
+    if (!isDuplicated && options.length < 2) {
+      setOptions((prevState) => [...prevState, element]);
+      element.classList.add("blue");
       return;
     }
-
-    setCheckRightAnswer([]);
   }
 
   useEffect(() => {
     if (checkRightAnswer.length === 2) {
+      if (checkRightAnswer[0] === checkRightAnswer[1]) {
+        setValues(values.filter(({ key }) => key != checkRightAnswer[0]));
+        setOptions([]);
+      } else {
+        options.forEach((element) => {
+          element.classList.remove("blue");
+          element.classList.add("red");
+          setTimeout(() => {
+            element.classList.remove("red");
+            setOptions([]);
+          }, 2000);
+        });
+      }
     }
   }, [checkRightAnswer]);
 
   useEffect(() => {
-    setValues(sortValues(data));
-  }, []);
+    if (options.length === 2) {
+      const checkSelectedOptions = [];
+      options.forEach((element) => {
+        checkSelectedOptions.push(element.id);
+      });
+
+      setCheckRightAnswer(checkSelectedOptions);
+    }
+  }, [options]);
+
+  useMemo(() => setValues(sortValues(data)), []);
 
   return (
     <div>
       <style>{`
-        .blue {background-color: blue; color: black},
+        .blue {background-color: blue; color: black}
         .red {background-color: red; color: black}
       `}</style>
       {values.map(({ value, key }, index) => {
         return (
           <button
             key={index}
-            value={key}
-            name={key}
+            id={key}
             className={value}
             onClick={(value) => handleButtonClicked(value)}
           >
@@ -70,6 +80,7 @@ export default function CountryCapitalGame({ data = values }) {
           </button>
         );
       })}
+      {values.length === 0 && <p>Fim de jogo, parabéns!</p>}
     </div>
   );
 }
