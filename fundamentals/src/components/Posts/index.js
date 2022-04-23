@@ -3,6 +3,8 @@ import PropTypes from "proptypes";
 
 import Button from "../Button";
 
+import * as S from './styles'
+
 function Posts({ post, onRemove }) {
   return (
     <div>
@@ -10,8 +12,8 @@ function Posts({ post, onRemove }) {
         <strong style={{ marginRight: 5 }}>{post.title}</strong>
         <Button onClick={() => onRemove(post.id)}>Remover</Button>
         <br />
-        <p>{post.description}</p>
-        Likes: {post.likes}
+        <S.description>{post.description}</S.description>
+        <S.likes>Likes: {post.likes}</S.likes>
       </article>
       <br />
     </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import AddPost from "./AddPost";
 import Header from "./Header";
 import Posts from "./Posts";
 
@@ -59,8 +60,7 @@ function App() {
   return (
     <>
       <Header title="Header da Aplicação com CSS Modules">
-        <h2>Header h2</h2>
-        <button onClick={handleAddPost}>Adicionar Post</button>
+        <AddPost handleAddPost={handleAddPost} />
       </Header>
 
       {
