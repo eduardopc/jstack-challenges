@@ -7,7 +7,7 @@ module.exports = {
   entry: path.resolve(__dirname, "src", "index.js"),
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: "bundle[contenthash].js", // gera um nobo bundle com um novo hash caso os arquivos tenham sido modificados
+    filename: "bundle[contenthash].js", // gera um novo bundle com um novo hash caso os arquivos tenham sido modificados
   },
   plugins: [
     new HtmlWebpackPlugin({

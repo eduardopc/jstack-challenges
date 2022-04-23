@@ -18,7 +18,7 @@ function solution(numbers) {
   return number ? number : sortedArray[sortedArray.length - 1] + 1;
 }
 
-console.log(solution([-1, -3, 1, 0, 3, 6, 4, 1, 2, 1, 2, 3]));
+console.log(solution([5, -1, 7, -3, 1, 0, 6, 1, 2, 1, 2, 3, 9999]));
 
 // For example, given A = [1, 3, 6, 4, 1, 2], the function should return 5.
 

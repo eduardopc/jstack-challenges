@@ -1,4 +1,3 @@
-import cx from "classnames";
 import React, { Component } from "react";
 
 export default class LikeDislike extends Component {

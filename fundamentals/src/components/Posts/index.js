@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "proptypes";
 
-import Button from "./Button";
+import Button from "../Button";
 
 function Posts({ post, onRemove }) {
   return (

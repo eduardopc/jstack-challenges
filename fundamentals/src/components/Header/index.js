@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import PropTypes from "proptypes";
 
-import Buttom from "./Button";
-import { ThemeContext } from "./ThemeContext";
+import Buttom from "../Button";
+import { ThemeContext } from "../../context/ThemeContext";
 
 import styles from "./Header.css"; // gera hash unico - verificar h1 abaixo
 

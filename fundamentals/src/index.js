@@ -1,10 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import App from "./screens/App";
+import GlobalStyles from './styles/global'
+import { ThemeProvider } from "./context/ThemeContext"
 
-import "./index.css";
+import App from "./components/App";
 
-if (typeof window !== "undefined") {
-  ReactDOM.render(<App />, document.getElementById("root"));
-}
+ReactDOM.render(
+  <ThemeProvider>
+    <GlobalStyles />
+    <App />
+  </ThemeProvider>,
+  document.getElementById("root")
+);
+
