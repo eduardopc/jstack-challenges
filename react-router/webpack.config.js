@@ -8,6 +8,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle[contenthash].js", // gera um novo bundle com um novo hash caso os arquivos tenham sido modificados
+    publicPath: "/",
   },
   plugins: [
     new HtmlWebpackPlugin({
