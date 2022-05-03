@@ -24,6 +24,14 @@ export default {
   },
   colors: {
     mainBg: '#F6F5FC',
+    primary: '#5061fc',
+    primary_light: '#6674f4',
+    primary_lighter: '#E0E3FF',
+    primary_dark: '#3346F0',
+    gray: {
+      dark: '#222222',
+      light: '#BCBCBC',
+    },
   },
   spacings: {
     xxsmall: '0.8rem',
