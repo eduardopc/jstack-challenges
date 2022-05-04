@@ -4,9 +4,13 @@ import edit from '../../assets/images/icons/edit.svg';
 
 import * as S from './styles';
 
-export default function ContactsList() {
+export default function Home() {
   return (
     <S.Container>
+      <S.InputSearchContainer>
+        <input type="text" placeholder="Pesquisar contato" />
+      </S.InputSearchContainer>
+
       <S.Header>
         <strong>0 contatos</strong>
         <a href="/">Novo contato</a>
