@@ -32,6 +32,11 @@ export default {
       dark: '#222222',
       light: '#BCBCBC',
     },
+    danger: {
+      light: '#F97171',
+      main: '#FC5050',
+      dark: '#FC3131',
+    },
   },
   spacings: {
     xxsmall: '0.8rem',
