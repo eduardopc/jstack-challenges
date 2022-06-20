@@ -7,6 +7,7 @@ import Button from '../Button';
 import FormGroup from '../FormGroup';
 
 import isEmailValid from '../../utils/isEmailValid';
+import formatPhone from '../../utils/formatPhone';
 import useErrors from '../../hooks/useErrors';
 
 import * as S from './styles';
@@ -42,6 +43,10 @@ export default function ContactForm({ buttonLabel }) {
     } else {
       removeError('mail');
     }
+  };
+
+  const handlePhone = (event) => {
+    setPhone(formatPhone(event.target.value));
   };
 
   const handleSubmit = (event) => {
@@ -84,7 +89,8 @@ export default function ContactForm({ buttonLabel }) {
           type="text"
           placeholder="Telefone"
           value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          onChange={handlePhone}
+          maxLength={15}
           // ref={phoneInput}
           // onChange={(event) => event.target.value}
         />
