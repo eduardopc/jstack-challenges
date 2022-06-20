@@ -47,16 +47,17 @@ export default function ContactForm({ buttonLabel }) {
   const handleSubmit = (event) => {
     event.preventDefault(); // evita o refresh da pagina ao realizar o submit
 
-    console.log({
-      name,
-      email,
-      phone,
-      category,
-    });
+    // console.log({
+    //   name,
+    //   email,
+    //   phone,
+    //   category,
+    // });
   };
 
   return (
-    <S.Form onSubmit={handleSubmit}>
+    // TIP: no validade remove as validações realizadas pelo próprio HMTL - e.g.: email inválido
+    <S.Form onSubmit={handleSubmit} noValidate>
       {/* <button type="button" onClick={handlePhoneInput}>Show phoneInput Value</button> */}
       <FormGroup error={getErrorByFieldValue('name')}>
         <Input
@@ -70,8 +71,8 @@ export default function ContactForm({ buttonLabel }) {
 
       <FormGroup error={getErrorByFieldValue('mail')}>
         <Input
+          type="email"
           error={getErrorByFieldValue('mail')}
-          type="text"
           placeholder="E-mail"
           value={email}
           onChange={handleEmail}
