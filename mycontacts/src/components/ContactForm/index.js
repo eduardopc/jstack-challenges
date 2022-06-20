@@ -18,12 +18,19 @@ export default function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
 
-  const { setError, removeError, getErrorByFieldValue } = useErrors();
+  const {
+    errors,
+    setError,
+    removeError,
+    getErrorByFieldValue,
+  } = useErrors();
   // const phoneInput = useRef(null); // uncontrolled component
 
   // function handlePhoneInput() {
   //   console.log(phoneInput.current.value);
   // }
+
+  const isValid = name && errors.length === 0;
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -108,7 +115,9 @@ export default function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <S.ButtonContainer>
-        <Button type="submit">{buttonLabel}</Button>
+        <Button type="submit" disabled={!isValid}>
+          {buttonLabel}
+        </Button>
       </S.ButtonContainer>
     </S.Form>
   );
