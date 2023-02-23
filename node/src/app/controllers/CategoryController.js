@@ -1,11 +1,11 @@
 const CategoryRepository = require('../repositories/CategoryRepository');
 
-class ContactController {
+class CategoryController {
   async index(request, response) {
     const { orderBy } = request.query;
-    const contacts = await CategoryRepository.findAll(orderBy);
+    const categories = await CategoryRepository.findAll(orderBy);
 
-    response.json(contacts);
+    response.json(categories);
   }
 
   async show(request, response) {
@@ -80,4 +80,4 @@ class ContactController {
   }
 }
 
-module.exports = new ContactController();
+module.exports = new CategoryController();

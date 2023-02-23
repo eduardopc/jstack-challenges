@@ -1,6 +1,6 @@
 version: "3.4"
 volumes:
-  portal-postgresql:
+  jstack-postgresql:
 networks:
   default:
     driver: bridge
@@ -14,4 +14,4 @@ services:
     ports:
       - "5439:5432"
     volumes:
-      - portal-postgresql:/var/lib/postgresql/data
+      - jstack-postgresql:/var/lib/postgresql/data
