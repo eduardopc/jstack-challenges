@@ -55,6 +55,7 @@ function App() {
       setPosts((prevState) => [
         ...prevState,
         {
+          id: Math.random(),
           title: `Post${prevState.length + 1}`,
           description: `Description Post${prevState.length + 1}`,
           likes: 20,

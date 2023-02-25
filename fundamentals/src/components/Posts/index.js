@@ -9,6 +9,7 @@ function Posts({ post, onRemove }) {
   return (
     <div>
       <article style={{ backgroundColor: "#25D1BF" }}>
+        <p>{`#ID: ${post.id}`}</p>
         <strong style={{ marginRight: 5 }}>{post.title}</strong>
         <Button onClick={() => onRemove(post.id)}>Remover</Button>
         <br />

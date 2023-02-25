@@ -13,6 +13,7 @@ function AddPost({ handleAddPost }) {
         document.addEventListener('scroll', handleScroll)
 
         return () => {
+            console.log('unmount and remove scroll event listener')
             document.removeEventListener('scroll', handleScroll)
         }
     }, [])

@@ -1,7 +1,7 @@
 // functions
 
 function myFunction() {
-  this.name = "Eduardo";
+  this.name = "myFunction Eduardo";
 }
 
 console.log(new myFunction()); // objeto com a propriedade name apenas dentro do contexto da função
@@ -9,7 +9,7 @@ console.log(new myFunction()); // objeto com a propriedade name apenas dentro do
 // arrow functions
 
 const myArrowFunction = () => {
-  this.name = "Eduardo";
+  this.name = "myArrow Eduardo";
 };
 
 myArrowFunction();
