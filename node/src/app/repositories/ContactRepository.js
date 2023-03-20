@@ -1,12 +1,13 @@
 const db = require('../../database');
 
 class ContactRepository {
-  async findAll(orderBy) {
+  async findAll(orderBy, searchTerm) {
     const direction = orderBy?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.query(`
         SELECT contacts.*, categories.name AS category_name
         FROM contacts
         LEFT JOIN categories ON categories.id = contacts.category_id
+        WHERE contacts.name ILIKE '%${searchTerm}%'
         ORDER BY contacts.name ${direction}
     `);
 

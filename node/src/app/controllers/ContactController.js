@@ -2,8 +2,8 @@ const ContactRepository = require('../repositories/ContactRepository');
 
 class ContactController {
   async index(request, response) {
-    const { orderBy } = request.query;
-    const contacts = await ContactRepository.findAll(orderBy);
+    const { orderBy, searchTerm = '' } = request.query;
+    const contacts = await ContactRepository.findAll(orderBy, searchTerm);
 
     response.json(contacts);
   }
