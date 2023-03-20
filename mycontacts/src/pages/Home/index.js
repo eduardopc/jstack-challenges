@@ -3,20 +3,23 @@ import { Link } from 'react-router-dom';
 import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
+import Loader from '../../components/Loader';
 import arrow from '../../assets/images/icons/arrow.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import { debounce } from '../../utils/debounce';
+import { delay } from '../../utils/delay';
 
 import * as S from './styles';
 
 const ORDER_CONTACTS = ['asc', 'desc'];
-const ORDER_VIA_API = false;
+const ORDER_VIA_API = false; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderContacts, setOrderContacts] = useState(ORDER_CONTACTS[0]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const contactsHeader = contacts.length === 1 ? 'contato' : 'contatos';
 
@@ -36,14 +39,19 @@ export default function Home() {
   const useEffectDependencies = ORDER_VIA_API ? [orderContacts, searchTerm] : [orderContacts];
 
   useEffect(() => {
+    setIsLoading(true);
+
     fetch(`http://localhost:1337/contacts?${buildURLPath}`, {
       method: 'GET',
     }).then(async (response) => {
+      await delay(500);
       const json = await response.json();
 
       setContacts(json);
     }).catch((error) => {
       console.log(error);
+    }).finally(() => {
+      setIsLoading(false);
     });
   }, useEffectDependencies);
 
@@ -66,6 +74,8 @@ export default function Home() {
 
   return (
     <S.Container>
+      <Loader isLoading={isLoading} />
+
       <S.InputSearchContainer>
         <input
           type="text"
