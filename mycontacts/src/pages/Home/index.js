@@ -8,9 +8,9 @@ import arrow from '../../assets/images/icons/arrow.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import { debounce } from '../../utils/debounce';
-import { delay } from '../../utils/delay';
 
 import * as S from './styles';
+import ContactsServices from '../../services/ContactsServices';
 
 const ORDER_CONTACTS = ['asc', 'desc'];
 const ORDER_VIA_API = false; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
@@ -39,20 +39,23 @@ export default function Home() {
   const useEffectDependencies = ORDER_VIA_API ? [orderContacts, searchTerm] : [orderContacts];
 
   useEffect(() => {
-    setIsLoading(true);
+    async function loadContacts() {
+      try {
+        setIsLoading(true);
 
-    fetch(`http://localhost:1337/contacts?${buildURLPath}`, {
-      method: 'GET',
-    }).then(async (response) => {
-      await delay(500);
-      const json = await response.json();
+        const contactsList = await ContactsServices.listContacts(buildURLPath);
 
-      setContacts(json);
-    }).catch((error) => {
-      console.log(error);
-    }).finally(() => {
-      setIsLoading(false);
-    });
+        setContacts(contactsList);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadContacts();
+
+    return () => console.log('unmount');
   }, useEffectDependencies);
 
   const handleOrderContacts = () => {
