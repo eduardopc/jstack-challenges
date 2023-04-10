@@ -14,7 +14,7 @@ class ContactController {
     const contact = await ContactRepository.findById(id);
 
     if (!contact) {
-      return response.status(404).json({ erro: 'User not found' });
+      return response.status(404).json({ error: 'User not found' });
     }
 
     return response.json(contact);
@@ -29,13 +29,13 @@ class ContactController {
     } = request.body;
 
     if (!name) {
-      return response.status(400).json({ erro: 'Field name is required' });
+      return response.status(400).json({ error: 'Field name is required' });
     }
 
     const checkIfEmailExists = await ContactRepository.findByEmail(email);
 
     if (checkIfEmailExists) {
-      return response.status(400).json({ erro: 'User already registered' });
+      return response.status(400).json({ error: 'User already registered' });
     }
 
     const contact = await ContactRepository.create({
@@ -45,7 +45,7 @@ class ContactController {
       category_id,
     });
 
-    return response.json(contact);
+    return response.status(201).json(contact);
   }
 
   async update(request, response) {
@@ -60,17 +60,17 @@ class ContactController {
     const contact = await ContactRepository.findById(id);
 
     if (!contact) {
-      return response.status(404).json({ erro: 'User not found' });
+      return response.status(404).json({ error: 'User not found' });
     }
 
     if (!name) {
-      return response.status(400).json({ erro: 'Field name is required' });
+      return response.status(400).json({ error: 'Field name is required' });
     }
 
     const contactByEmail = await ContactRepository.findByEmail(email);
 
     if (contactByEmail && contactByEmail.id !== id) {
-      return response.status(400).json({ erro: 'User already registered' });
+      return response.status(400).json({ error: 'User already registered' });
     }
 
     const updatedContact = await ContactRepository.update(id, {

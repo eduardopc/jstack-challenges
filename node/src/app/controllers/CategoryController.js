@@ -39,7 +39,7 @@ class CategoryController {
       name,
     });
 
-    return response.json(category);
+    return response.status(201).json(category);
   }
 
   async update(request, response) {
