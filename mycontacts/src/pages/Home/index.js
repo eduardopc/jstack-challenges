@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import {
   useCallback, useEffect, useMemo, useState,
@@ -11,6 +12,7 @@ import { debounce } from '../../utils/debounce';
 
 import * as S from './styles';
 import ContactsServices from '../../services/ContactsServices';
+import Button from '../../components/Button';
 
 const ORDER_CONTACTS = ['asc', 'desc'];
 const ORDER_VIA_API = false; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
@@ -20,6 +22,7 @@ export default function Home() {
   const [orderContacts, setOrderContacts] = useState(ORDER_CONTACTS[0]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   const contactsHeader = contacts.length === 1 ? 'contato' : 'contatos';
 
@@ -38,24 +41,35 @@ export default function Home() {
 
   const useEffectDependencies = ORDER_VIA_API ? [orderContacts, searchTerm] : [orderContacts];
 
-  useEffect(() => {
-    async function loadContacts() {
-      try {
-        setIsLoading(true);
+  async function loadContacts() {
+    try {
+      setIsLoading(true);
 
-        const contactsList = await ContactsServices.listContacts(buildURLPath);
+      const contactsList = await ContactsServices.listContacts(buildURLPath);
 
-        setContacts(contactsList);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
+      setHasError(false);
+      setContacts(contactsList);
+    } catch (error) {
+      setHasError(true);
+      toast.error('Erro ao carregar a lista de contatos', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: 'colored',
+      });
+      // metodo criado dentro da classe de custom Error - APIError
+      console.log(error.getContentType());
+    } finally {
+      setIsLoading(false);
     }
+  }
 
+  useEffect(() => {
     loadContacts();
-
-    return () => console.log('unmount');
   }, useEffectDependencies);
 
   const handleOrderContacts = () => {
@@ -75,6 +89,10 @@ export default function Home() {
     [],
   );
 
+  const handleTryAgain = () => {
+    loadContacts();
+  };
+
   return (
     <S.Container>
       <Loader isLoading={isLoading} />
@@ -87,42 +105,55 @@ export default function Home() {
         />
       </S.InputSearchContainer>
 
-      <S.Header>
-        <strong>{`${listContacts.length} ${contactsHeader}`}</strong>
+      <S.Header hasError={hasError}>
+        {!hasError && <strong>{`${listContacts.length} ${contactsHeader}`}</strong>}
         <Link to="/new">Novo contato</Link>
       </S.Header>
 
-      {listContacts.length > 0 && (
-        <S.ListHeader>
-          <button type="button" onClick={handleOrderContacts}>
-            <span>Nome</span>
-            <S.Arrow src={arrow} alt="Arrow" rotate={orderContacts === ORDER_CONTACTS[0]} />
-          </button>
-        </S.ListHeader>
+      {hasError && (
+        <S.TryAgain>
+          <Button type="button" onClick={handleTryAgain}>
+            Tentar Novamente
+          </Button>
+        </S.TryAgain>
       )}
 
-      {listContacts.map((contact) => (
-        <S.Card key={contact.id}>
-          <div className="info">
-            <div className="contact-name">
-              <strong>{contact.name}</strong>
-              {contact.category_name && <small>{contact.category_name}</small>}
-            </div>
-
-            <span>{contact.email}</span>
-            <span>{contact.phone}</span>
-          </div>
-
-          <div className="actions">
-            <Link to={`/edit/${contact.id}`}>
-              <img src={edit} alt="Edit" />
-            </Link>
-            <button type="button">
-              <img src={trash} alt="Delete" />
+      {!hasError && (
+        <>
+          {listContacts.length > 0 && (
+          <S.ListHeader>
+            <button type="button" onClick={handleOrderContacts}>
+              <span>Nome</span>
+              <S.Arrow src={arrow} alt="Arrow" rotate={orderContacts === ORDER_CONTACTS[0]} />
             </button>
-          </div>
-        </S.Card>
-      ))}
+          </S.ListHeader>
+          )}
+
+          {listContacts.map((contact) => (
+            <S.Card key={contact.id}>
+              <div className="info">
+                <div className="contact-name">
+                  <strong>{contact.name}</strong>
+                  {contact.category_name && <small>{contact.category_name}</small>}
+                </div>
+
+                <span>{contact.email}</span>
+                <span>{contact.phone}</span>
+              </div>
+
+              <div className="actions">
+                <Link to={`/edit/${contact.id}`}>
+                  <img src={edit} alt="Edit" />
+                </Link>
+                <button type="button">
+                  <img src={trash} alt="Delete" />
+                </button>
+              </div>
+            </S.Card>
+          ))}
+
+        </>
+      )}
     </S.Container>
   );
 }

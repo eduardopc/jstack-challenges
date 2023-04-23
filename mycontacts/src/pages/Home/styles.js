@@ -26,7 +26,7 @@ export const InputSearchContainer = styled.div`
 
 export const Header = styled.header`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')};
   align-items: center;
   margin-top: 32px;
 
@@ -120,5 +120,16 @@ export const Card = styled.div`
       border: none;
       margin-left: 8px;
     }
+  }
+`;
+
+export const TryAgain = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 16px auto;
+  border-top: 2px solid ${({ theme }) => theme.colors.gray.light};
+
+  button {
+    margin-top: 16px;
   }
 `;
