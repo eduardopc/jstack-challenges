@@ -68,7 +68,7 @@ export default function ContactForm({ buttonLabel }) {
   };
 
   return (
-    // TIP: no validade remove as validações realizadas pelo próprio HMTL - e.g.: email inválido
+    // TIP: noValidade remove as validações realizadas pelo próprio HMTL - e.g.: email inválido
     <S.Form onSubmit={handleSubmit} noValidate>
       {/* <button type="button" onClick={handlePhoneInput}>Show phoneInput Value</button> */}
       <FormGroup error={getErrorByFieldValue('name')}>

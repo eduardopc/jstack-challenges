@@ -26,9 +26,10 @@ export const InputSearchContainer = styled.div`
 
 export const Header = styled.header`
   display: flex;
-  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')};
+  justify-content: ${({ justifyContent }) => justifyContent};
   align-items: center;
   margin-top: 32px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray.light};
 
   strong {
     color: ${({ theme }) => theme.colors.gray.dark};
@@ -43,6 +44,7 @@ export const Header = styled.header`
     padding: 8px 16px;
     border-radius: 4px;
     transition: all 0.2s ease-in;
+    margin-bottom: 16px;
 
     &:hover {
       background: ${({ theme }) => theme.colors.primary};
@@ -126,10 +128,26 @@ export const Card = styled.div`
 export const TryAgain = styled.div`
   display: flex;
   justify-content: center;
-  margin: 16px auto;
-  border-top: 2px solid ${({ theme }) => theme.colors.gray.light};
 
   button {
     margin-top: 16px;
+  }
+`;
+
+export const EmptyContacts = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  margin-top: 16px;
+
+  p {
+    color: ${({ theme }) => theme.colors.gray.light};
+    text-align: center;
+    margin-top: 8px;
+
+    strong {
+      color: ${({ theme }) => theme.colors.primary};
+    }
   }
 `;

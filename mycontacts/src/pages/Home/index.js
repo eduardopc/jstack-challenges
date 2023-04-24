@@ -8,6 +8,7 @@ import Loader from '../../components/Loader';
 import arrow from '../../assets/images/icons/arrow.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import edit from '../../assets/images/icons/edit.svg';
+import emptyBox from '../../assets/images/empty-box.svg';
 import { debounce } from '../../utils/debounce';
 
 import * as S from './styles';
@@ -15,7 +16,7 @@ import ContactsServices from '../../services/ContactsServices';
 import Button from '../../components/Button';
 
 const ORDER_CONTACTS = ['asc', 'desc'];
-const ORDER_VIA_API = false; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
+const ORDER_VIA_API = true; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -31,17 +32,15 @@ export default function Home() {
     : `orderBy=${orderContacts}`;
 
   const filteredContacts = useMemo(
-    () => contacts.filter(
-      (contact) => (contact.name.toLowerCase().includes(searchTerm.toLowerCase())),
-    ),
+    () =>
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(searchTerm.toLowerCase())),
     [contacts, searchTerm],
   );
 
   const listContacts = ORDER_VIA_API ? contacts : filteredContacts;
 
-  const useEffectDependencies = ORDER_VIA_API ? [orderContacts, searchTerm] : [orderContacts];
-
-  async function loadContacts() {
+  const loadContacts = useCallback(async () => {
     try {
       setIsLoading(true);
 
@@ -66,18 +65,15 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [buildURLPath]);
 
   useEffect(() => {
     loadContacts();
-  }, useEffectDependencies);
+  }, [loadContacts]);
 
   const handleOrderContacts = () => {
     setOrderContacts((prevState) =>
-      (prevState === ORDER_CONTACTS[0]
-        ? ORDER_CONTACTS[1]
-        : ORDER_CONTACTS[0]
-      ));
+      (prevState === ORDER_CONTACTS[0] ? ORDER_CONTACTS[1] : ORDER_CONTACTS[0]));
   };
 
   const handleSearchTerm = (event) => {
@@ -97,16 +93,31 @@ export default function Home() {
     <S.Container>
       <Loader isLoading={isLoading} />
 
-      <S.InputSearchContainer>
-        <input
-          type="text"
-          placeholder="Pesquisar contato"
-          onChange={ORDER_VIA_API ? debouncedChangeHandler : handleSearchTerm}
-        />
-      </S.InputSearchContainer>
+      {contacts.length > 0 && (
+        <S.InputSearchContainer>
+          <input
+            type="text"
+            placeholder="Pesquisar contato"
+            onChange={ORDER_VIA_API ? debouncedChangeHandler : handleSearchTerm}
+          />
+        </S.InputSearchContainer>
+      )}
 
-      <S.Header hasError={hasError}>
-        {!hasError && <strong>{`${listContacts.length} ${contactsHeader}`}</strong>}
+      <S.Header
+        justifyContent={
+          hasError
+            ? 'flex-end'
+            : contacts.length > 0
+              ? 'space-between'
+              : 'center'
+        }
+      >
+        {!!(!hasError && contacts.length) && (
+          <strong>
+            {`${listContacts.length}
+            ${contactsHeader}`}
+          </strong>
+        )}
         <Link to="/new">Novo contato</Link>
       </S.Header>
 
@@ -120,13 +131,29 @@ export default function Home() {
 
       {!hasError && (
         <>
+          {(contacts.length < 1 && !isLoading) && (
+            <S.EmptyContacts>
+              <img src={emptyBox} alt="Empty Box" />
+
+              <p>
+                Você ainda não tem nenhum contato cadastrado! Clique no botão{' '}
+                <strong>”Novo contato”</strong> à cima para cadastrar o seu
+                primeiro!
+              </p>
+            </S.EmptyContacts>
+          )}
+
           {listContacts.length > 0 && (
-          <S.ListHeader>
-            <button type="button" onClick={handleOrderContacts}>
-              <span>Nome</span>
-              <S.Arrow src={arrow} alt="Arrow" rotate={orderContacts === ORDER_CONTACTS[0]} />
-            </button>
-          </S.ListHeader>
+            <S.ListHeader>
+              <button type="button" onClick={handleOrderContacts}>
+                <span>Nome</span>
+                <S.Arrow
+                  src={arrow}
+                  alt="Arrow"
+                  rotate={orderContacts === ORDER_CONTACTS[0]}
+                />
+              </button>
+            </S.ListHeader>
           )}
 
           {listContacts.map((contact) => (
@@ -134,7 +161,9 @@ export default function Home() {
               <div className="info">
                 <div className="contact-name">
                   <strong>{contact.name}</strong>
-                  {contact.category_name && <small>{contact.category_name}</small>}
+                  {contact.category_name && (
+                    <small>{contact.category_name}</small>
+                  )}
                 </div>
 
                 <span>{contact.email}</span>
@@ -151,7 +180,6 @@ export default function Home() {
               </div>
             </S.Card>
           ))}
-
         </>
       )}
     </S.Container>
