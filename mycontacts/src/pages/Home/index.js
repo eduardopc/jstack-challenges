@@ -9,6 +9,7 @@ import arrow from '../../assets/images/icons/arrow.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import emptyBox from '../../assets/images/empty-box.svg';
+import notFound from '../../assets/images/not-found.svg';
 import { debounce } from '../../utils/debounce';
 
 import * as S from './styles';
@@ -16,7 +17,7 @@ import ContactsServices from '../../services/ContactsServices';
 import Button from '../../components/Button';
 
 const ORDER_CONTACTS = ['asc', 'desc'];
-const ORDER_VIA_API = true; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
+const ORDER_VIA_API = false; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -93,15 +94,13 @@ export default function Home() {
     <S.Container>
       <Loader isLoading={isLoading} />
 
-      {contacts.length > 0 && (
-        <S.InputSearchContainer>
-          <input
-            type="text"
-            placeholder="Pesquisar contato"
-            onChange={ORDER_VIA_API ? debouncedChangeHandler : handleSearchTerm}
-          />
-        </S.InputSearchContainer>
-      )}
+      <S.InputSearchContainer>
+        <input
+          type="text"
+          placeholder="Pesquisar contato"
+          onChange={ORDER_VIA_API ? debouncedChangeHandler : handleSearchTerm}
+        />
+      </S.InputSearchContainer>
 
       <S.Header
         justifyContent={
@@ -141,6 +140,16 @@ export default function Home() {
                 primeiro!
               </p>
             </S.EmptyContacts>
+          )}
+
+          {(!ORDER_VIA_API && contacts.length > 0 && filteredContacts.length < 1) && (
+            <S.NotFoundFilteredContacts>
+              <img src={notFound} alt="Not found" />
+
+              <span>
+                Nenhum resultado foi encontrado para <strong>{searchTerm}</strong>
+              </span>
+            </S.NotFoundFilteredContacts>
           )}
 
           {listContacts.length > 0 && (

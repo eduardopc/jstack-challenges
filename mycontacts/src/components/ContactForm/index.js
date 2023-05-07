@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import Input from '../Input';
@@ -11,12 +12,40 @@ import formatPhone from '../../utils/formatPhone';
 import useErrors from '../../hooks/useErrors';
 
 import * as S from './styles';
+import CategoriesServices from '../../services/CategoriesServices';
 
 export default function ContactForm({ buttonLabel }) {
   const [name, setName] = useState(''); // controlled components
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [loading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const listCategories = await CategoriesServices.listCategories();
+
+        setCategoriesList(listCategories);
+      } catch (error) {
+        toast.warning('Lista de categorias não foi carregada com sucesso', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: 'colored',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadCategories();
+  }, []);
 
   const {
     errors,
@@ -31,6 +60,7 @@ export default function ContactForm({ buttonLabel }) {
   // }
 
   const isValid = name && errors.length === 0;
+  const disabledButton = loading || !isValid;
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -103,19 +133,19 @@ export default function ContactForm({ buttonLabel }) {
         />
       </FormGroup>
 
-      <FormGroup>
+      <FormGroup isLoading={loading}>
         <Select
           value={category}
           onChange={(event) => setCategory(event.target.value)}
+          disabled={loading}
         >
-          <option value="">Selecione</option>
-          <option value="instagram">Instagram</option>
-          <option value="linkedin">LinkedIn</option>
+          <option value="">Sem categoria</option>
+          {categoriesList.map((option) => <option value={option.id}>{option.name}</option>)}
         </Select>
       </FormGroup>
 
       <S.ButtonContainer>
-        <Button type="submit" disabled={!isValid}>
+        <Button type="submit" disabled={disabledButton}>
           {buttonLabel}
         </Button>
       </S.ButtonContainer>

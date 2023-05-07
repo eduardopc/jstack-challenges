@@ -151,3 +151,22 @@ export const EmptyContacts = styled.div`
     }
   }
 `;
+
+export const NotFoundFilteredContacts = styled.div`
+  display: flex;
+  justify-items: center;
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 16px;
+
+  span {
+    color: ${({ theme }) => theme.colors.gray.light};
+    text-align: center;
+    margin-left: 16px;
+    word-break: break-word;
+
+    strong {
+      color: ${({ theme }) => theme.colors.primary};
+    }
+  }
+`;
