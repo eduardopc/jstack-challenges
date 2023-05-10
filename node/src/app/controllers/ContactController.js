@@ -38,11 +38,13 @@ class ContactController {
       return response.status(400).json({ error: 'User already registered' });
     }
 
+    const normalizedCategoryId = category_id === '' ? null : category_id;
+
     const contact = await ContactRepository.create({
       name,
       email,
       phone,
-      category_id,
+      category_id: normalizedCategoryId,
     });
 
     return response.status(201).json(contact);

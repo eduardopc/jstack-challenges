@@ -8,6 +8,15 @@ class ContactsService {
   async listContacts(urlPath) {
     return this.httpClient.get(`/contacts?${urlPath}`);
   }
+
+  async createContact(contact) {
+    return this.httpClient.post('/contacts', {
+      body: contact,
+      headers: {
+        Authorization: '123',
+      },
+    });
+  }
 }
 
 export default new ContactsService();

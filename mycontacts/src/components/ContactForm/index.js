@@ -14,7 +14,7 @@ import useErrors from '../../hooks/useErrors';
 import * as S from './styles';
 import CategoriesServices from '../../services/CategoriesServices';
 
-export default function ContactForm({ buttonLabel }) {
+export default function ContactForm({ buttonLabel, onSubmit }) {
   const [name, setName] = useState(''); // controlled components
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -89,12 +89,12 @@ export default function ContactForm({ buttonLabel }) {
   const handleSubmit = (event) => {
     event.preventDefault(); // evita o refresh da pagina ao realizar o submit
 
-    // console.log({
-    //   name,
-    //   email,
-    //   phone,
-    //   category,
-    // });
+    onSubmit({
+      name,
+      email,
+      phone,
+      category,
+    });
   };
 
   return (
@@ -155,4 +155,5 @@ export default function ContactForm({ buttonLabel }) {
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
