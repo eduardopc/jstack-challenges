@@ -14,7 +14,7 @@ import { debounce } from '../../utils/debounce';
 
 import * as S from './styles';
 import ContactsServices from '../../services/ContactsServices';
-import Button from '../../components/Button';
+import { Button } from '../../components/Button';
 
 const ORDER_CONTACTS = ['asc', 'desc'];
 const ORDER_VIA_API = false; // PARA FAZER O FILTRO DE USUÁRIOS VIA API OU OFFLINE
@@ -122,9 +122,7 @@ export default function Home() {
 
       {hasError && (
         <S.TryAgain>
-          <Button type="button" onClick={handleTryAgain}>
-            Tentar Novamente
-          </Button>
+          <Button type="button" onClick={handleTryAgain} buttonLabel="Tentar Novamente" />
         </S.TryAgain>
       )}
 
