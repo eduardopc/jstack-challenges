@@ -7,6 +7,7 @@ import theme from '../../assets/styles/theme';
 
 import Header from '../Header';
 import Routes from '../../Routes';
+import CustomToastContainer from '../Toast/CustomToastContainer';
 
 import * as S from './styles';
 
@@ -15,6 +16,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <ToastContainer />
       <GlobalStyles />
+      <CustomToastContainer />
       <S.Container>
         <Header />
         <Routes />

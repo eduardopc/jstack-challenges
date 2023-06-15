@@ -49,10 +49,7 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
   }, []);
 
   const {
-    errors,
-    setError,
-    removeError,
-    getErrorByFieldValue,
+    errors, setError, removeError, getErrorByFieldValue,
   } = useErrors();
   // const phoneInput = useRef(null); // uncontrolled component
 
@@ -148,12 +145,20 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
           disabled={loading || isSubmitting}
         >
           <option value="">Sem categoria</option>
-          {categoriesList.map((option) => <option value={option.id}>{option.name}</option>)}
+          {categoriesList.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ))}
         </Select>
       </FormGroup>
 
       <S.ButtonContainer>
-        <Button disabled={disabledButton} isLoading={isSubmitting} buttonLabel={buttonLabel} />
+        <Button
+          disabled={disabledButton}
+          isLoading={isSubmitting}
+          buttonLabel={buttonLabel}
+        />
       </S.ButtonContainer>
     </S.Form>
   );
