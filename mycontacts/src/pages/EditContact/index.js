@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useParams, useHistory } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
@@ -11,7 +11,7 @@ export default function EditContact() {
   const { id } = useParams();
   const history = useHistory();
 
-  const [contact, setContact] = useState({});
+  const contactFormRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function EditContact() {
       try {
         const userContact = await ContactsServices.getContactById(id);
 
-        setContact(userContact);
+        contactFormRef.current.setFieldsValues(userContact);
         setIsLoading(false);
       } catch (error) {
         history.push('/');
@@ -39,7 +39,7 @@ export default function EditContact() {
 
       <PageHeader title="Editar Contato" />
 
-      <ContactForm key={contact.id} buttonLabel="Salvar Alterações" contact={contact} />
+      <ContactForm buttonLabel="Salvar Alterações" ref={contactFormRef} />
     </div>
   );
 }

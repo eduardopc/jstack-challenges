@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, forwardRef, useImperativeHandle,
+} from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
@@ -14,11 +16,11 @@ import useErrors from '../../hooks/useErrors';
 import * as S from './styles';
 import CategoriesServices from '../../services/CategoriesServices';
 
-export default function ContactForm({ buttonLabel, onSubmit, contact }) {
-  const [name, setName] = useState(contact.name); // controlled components
-  const [email, setEmail] = useState(contact.email);
-  const [phone, setPhone] = useState(contact.phone);
-  const [category, setCategory] = useState(contact.category_id);
+const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
+  const [name, setName] = useState(''); // controlled components
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [category, setCategory] = useState('');
   const [categoriesList, setCategoriesList] = useState([]);
   const [loading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,14 +50,19 @@ export default function ContactForm({ buttonLabel, onSubmit, contact }) {
     loadCategories();
   }, []);
 
+  // para setar o valor dos estados desse componente a partir do componente pai
+  useImperativeHandle(ref, () => ({
+    setFieldsValues: (contact) => {
+      setName(contact.name);
+      setEmail(contact.email);
+      setPhone(contact.phone);
+      setCategory(contact.category_id);
+    },
+  }), []);
+
   const {
     errors, setError, removeError, getErrorByFieldValue,
   } = useErrors();
-  // const phoneInput = useRef(null); // uncontrolled component
-
-  // function handlePhoneInput() {
-  //   console.log(phoneInput.current.value);
-  // }
 
   const isValid = name && errors.length === 0;
   const disabledButton = loading || !isValid || isSubmitting;
@@ -102,7 +109,6 @@ export default function ContactForm({ buttonLabel, onSubmit, contact }) {
   return (
     // TIP: noValidade remove as validações realizadas pelo próprio HMTL - e.g.: email inválido
     <S.Form onSubmit={handleSubmit} noValidate>
-      {/* <button type="button" onClick={handlePhoneInput}>Show phoneInput Value</button> */}
       <FormGroup error={getErrorByFieldValue('name')}>
         <Input
           error={getErrorByFieldValue('name')}
@@ -133,8 +139,6 @@ export default function ContactForm({ buttonLabel, onSubmit, contact }) {
           onChange={handlePhone}
           maxLength={15}
           disabled={isSubmitting}
-          // ref={phoneInput}
-          // onChange={(event) => event.target.value}
         />
       </FormGroup>
 
@@ -162,10 +166,11 @@ export default function ContactForm({ buttonLabel, onSubmit, contact }) {
       </S.ButtonContainer>
     </S.Form>
   );
-}
+});
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  contact: PropTypes.shape.isRequired,
 };
+
+export default ContactForm;
