@@ -9,7 +9,7 @@ export default function ToastMessage({ message, onRemoveMessage }) {
   useEffect(() => {
     const idSetTimeout = setTimeout(() => {
       onRemoveMessage(message.id);
-    }, 3000);
+    }, message.duration || 3000);
 
     return () => {
       clearTimeout(idSetTimeout);
@@ -24,6 +24,9 @@ export default function ToastMessage({ message, onRemoveMessage }) {
     <Container
       type={message.type}
       onClick={handleRemoveToast}
+      /* para acessibilidade - ao clicar no tab, o primeiro elemento a ser mostrado
+       por uma ferramenta de acessibilidade será com o menor índice
+      */
       tabIndex={0}
       role="button"
     >
@@ -40,6 +43,7 @@ ToastMessage.propTypes = {
     id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     type: PropTypes.oneOf(['default', 'success', 'danger']),
+    duration: PropTypes.number,
   }).isRequired,
   onRemoveMessage: PropTypes.func.isRequired,
 };

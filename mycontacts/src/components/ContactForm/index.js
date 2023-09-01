@@ -14,11 +14,11 @@ import useErrors from '../../hooks/useErrors';
 import * as S from './styles';
 import CategoriesServices from '../../services/CategoriesServices';
 
-export default function ContactForm({ buttonLabel, onSubmit }) {
-  const [name, setName] = useState(''); // controlled components
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+export default function ContactForm({ buttonLabel, onSubmit, contact }) {
+  const [name, setName] = useState(contact.name); // controlled components
+  const [email, setEmail] = useState(contact.email);
+  const [phone, setPhone] = useState(contact.phone);
+  const [category, setCategory] = useState(contact.category_id);
   const [categoriesList, setCategoriesList] = useState([]);
   const [loading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -167,4 +167,5 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  contact: PropTypes.shape.isRequired,
 };
