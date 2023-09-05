@@ -53,10 +53,10 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   // para setar o valor dos estados desse componente a partir do componente pai
   useImperativeHandle(ref, () => ({
     setFieldsValues: (contact) => {
-      setName(contact.name);
-      setEmail(contact.email);
-      setPhone(contact.phone);
-      setCategory(contact.category_id);
+      setName(contact.name ?? ''); // so cairá para o valor default caso o valor a esquerda for null / undefined - se for igual a 0 por exemplo, esse valor será considerado
+      setEmail(contact.email ?? '');
+      setPhone(formatPhone(contact.phone ?? ''));
+      setCategory(contact.category_id ?? '');
     },
   }), []);
 

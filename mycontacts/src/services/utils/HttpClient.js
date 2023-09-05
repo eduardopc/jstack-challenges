@@ -23,6 +23,19 @@ class HttpClient {
     });
   }
 
+  put(path, options) {
+    const headers = new Headers({
+      ...options?.headers,
+      'Content-Type': 'application/json',
+    });
+
+    return this.makeRequest(path, {
+      method: 'PUT',
+      body: JSON.stringify(options?.body),
+      headers,
+    });
+  }
+
   async makeRequest(path, options, ms = 500) {
     await delay(ms);
 

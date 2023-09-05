@@ -21,6 +21,15 @@ class ContactsService {
       },
     });
   }
+
+  updateContact(id, contact) {
+    return this.httpClient.put(`/contacts/${id}`, {
+      body: contact,
+      headers: {
+        Authorization: '123',
+      },
+    });
+  }
 }
 
 export default new ContactsService();
