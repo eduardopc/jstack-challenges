@@ -39,8 +39,8 @@ export const ButtonContainer = styled.button`
     }
 
     &[disabled] {
-      background: #ccc;
-      cursor: default;
+      background: #ccc !important;
+      cursor: default !important;
     }
 
     &[danger] {

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
+import { toast as thirdToast } from 'react-toastify';
 import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
+import toast from '../../utils/toast';
+
 import Loader from '../../components/Loader';
+import Modal from '../../components/Modal';
 import arrow from '../../assets/images/icons/arrow.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import edit from '../../assets/images/icons/edit.svg';
@@ -24,7 +26,10 @@ export default function Home() {
   const [orderContacts, setOrderContacts] = useState(ORDER_CONTACTS[0]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingDeleteContact, setIsLoadingDeleteContact] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
 
   const contactsHeader = contacts.length === 1 ? 'contato' : 'contatos';
 
@@ -51,7 +56,7 @@ export default function Home() {
       setContacts(contactsList);
     } catch (error) {
       setHasError(true);
-      toast.error('Erro ao carregar a lista de contatos', {
+      thirdToast.error('Erro ao carregar a lista de contatos', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: true,
@@ -90,9 +95,49 @@ export default function Home() {
     loadContacts();
   };
 
+  const toggleDeleteModal = (contact = null) => {
+    setContactBeingDeleted(contact);
+    setShowDeleteModal((prevState) => !prevState);
+  };
+
+  const deleteContact = async () => {
+    try {
+      setIsLoadingDeleteContact(true);
+      await ContactsServices.deleteContactById(contactBeingDeleted.id);
+
+      setContacts(contacts.filter((contact) => contact.id !== contactBeingDeleted.id));
+
+      toggleDeleteModal();
+      toast({
+        type: 'success',
+        text: 'Contato removido com sucesso!',
+        duration: 4000,
+      });
+    } catch {
+      toast({
+        type: 'danger',
+        text: 'Ocorreu um erro ao excluir o contato!',
+      });
+    } finally {
+      setIsLoadingDeleteContact(false);
+    }
+  };
+
   return (
     <S.Container>
       <Loader isLoading={isLoading} />
+
+      <Modal
+        danger
+        visible={showDeleteModal}
+        title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"`}
+        confirmLabel="Deletar"
+        onCancelButton={toggleDeleteModal}
+        onConfirmButton={deleteContact}
+        isLoading={isLoadingDeleteContact}
+      >
+        <p>Esta ação não poderá ser desfeita</p>
+      </Modal>
 
       <S.InputSearchContainer>
         <input
@@ -181,7 +226,7 @@ export default function Home() {
                 <Link to={`/edit/${contact.id}`}>
                   <img src={edit} alt="Edit" />
                 </Link>
-                <button type="button">
+                <button type="button" onClick={() => toggleDeleteModal({ id: contact.id, name: contact.name })}>
                   <img src={trash} alt="Delete" />
                 </button>
               </div>

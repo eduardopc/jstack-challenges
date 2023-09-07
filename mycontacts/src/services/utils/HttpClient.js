@@ -10,6 +10,10 @@ class HttpClient {
     return this.makeRequest(path, { method: 'GET', headers: options?.headers });
   }
 
+  delete(path, options) {
+    return this.makeRequest(path, { method: 'DELETE', headers: options?.headers });
+  }
+
   post(path, options) {
     const headers = new Headers({
       ...options?.headers,
@@ -43,7 +47,7 @@ class HttpClient {
 
     let body = null;
     const contentType = response.headers.get('Content-Type');
-    if (contentType.includes('application/json')) {
+    if (contentType?.includes('application/json')) {
       body = await response.json();
     }
 

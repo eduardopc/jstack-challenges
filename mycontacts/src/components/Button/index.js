@@ -5,10 +5,15 @@ import { Spinner } from '../Spinner';
 import * as S from './styles';
 
 export function Button({
-  type, buttonLabel, disabled, isLoading, onClick,
+  type, buttonLabel, disabled, isLoading, onClick, danger,
 }) {
   return (
-    <S.ButtonContainer onClick={onClick} type={type} disabled={disabled || isLoading}>
+    <S.ButtonContainer
+      danger={danger}
+      onClick={onClick}
+      type={type}
+      disabled={disabled || isLoading}
+    >
       {!isLoading && buttonLabel}
       {isLoading && <Spinner size={16} />}
     </S.ButtonContainer>
@@ -16,6 +21,7 @@ export function Button({
 }
 
 Button.propTypes = {
+  danger: PropTypes.bool,
   type: PropTypes.string,
   buttonLabel: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
@@ -24,8 +30,9 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  danger: false,
   type: 'submit',
   disabled: false,
   isLoading: false,
-  onClick: () => {},
+  onClick: undefined,
 };

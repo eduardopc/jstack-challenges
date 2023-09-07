@@ -13,6 +13,10 @@ class ContactsService {
     return this.httpClient.get(`/contacts/${id}`);
   }
 
+  deleteContactById(id) {
+    return this.httpClient.delete(`/contacts/${id}`);
+  }
+
   createContact(contact) {
     return this.httpClient.post('/contacts', {
       body: contact,
