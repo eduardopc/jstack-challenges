@@ -1,9 +1,9 @@
-import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
 import { Button } from '../Button';
 
 import * as S from './styles';
+import ReactPortal from '../ReactPortal';
 
 export default function Modal({
   children,
@@ -26,36 +26,38 @@ export default function Modal({
 
   if (!visible) return false;
 
-  return createPortal(
-    <S.Overlay>
-      <S.Container danger={danger}>
-        <h1>{title}</h1>
-        <div className="modal-body">{children}</div>
-        <S.Footer>
-          <button
-            type="button"
-            className="cancel-button"
-            disabled={isLoading}
-            onClick={handleCancelButton}
-          >
-            {cancelLabel}
-          </button>
-          <Button
-            type="button"
-            danger={danger}
-            isLoading={isLoading}
-            buttonLabel={confirmLabel}
-            onClick={handleConfirmButton}
-          />
-        </S.Footer>
-      </S.Container>
-    </S.Overlay>,
-    document.getElementById('modal-root'),
+  return (
+    <ReactPortal containerId="modal-root">
+      <S.Overlay>
+        <S.Container danger={danger}>
+          <h1>{title}</h1>
+          <div className="modal-body">{children}</div>
+          <S.Footer>
+            <button
+              type="button"
+              className="cancel-button"
+              disabled={isLoading}
+              onClick={handleCancelButton}
+            >
+              {cancelLabel}
+            </button>
+            <Button
+              type="button"
+              danger={danger}
+              isLoading={isLoading}
+              buttonLabel={confirmLabel}
+              onClick={handleConfirmButton}
+            />
+          </S.Footer>
+        </S.Container>
+      </S.Overlay>,
+    </ReactPortal>
   );
 }
 
 Modal.propTypes = {
   danger: PropTypes.bool,
+  visible: PropTypes.bool,
   isLoading: PropTypes.bool,
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -67,6 +69,7 @@ Modal.propTypes = {
 
 Modal.defaultProps = {
   danger: false,
+  visible: false,
   isLoading: false,
   cancelLabel: 'Cancelar',
   confirmLabel: 'Confirmar',
