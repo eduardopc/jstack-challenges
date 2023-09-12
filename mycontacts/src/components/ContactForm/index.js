@@ -15,14 +15,15 @@ import useErrors from '../../hooks/useErrors';
 
 import * as S from './styles';
 import CategoriesServices from '../../services/CategoriesServices';
+import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 
 const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [name, setName] = useState(''); // controlled components
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
-  const [categoriesList, setCategoriesList] = useState([]);
-  const [loading, setIsLoading] = useState(true);
+  const [categoriesList, setCategoriesList] = useSafeAsyncState([]);
+  const [loading, setIsLoading] = useSafeAsyncState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
     }
 
     loadCategories();
-  }, []);
+  }, [setCategoriesList, setIsLoading]);
 
   // para setar o valor dos estados desse componente a partir do componente pai
   useImperativeHandle(ref, () => ({
